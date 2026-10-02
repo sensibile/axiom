@@ -1,0 +1,8 @@
+{
+  "hook_exit": 1,
+  "detail": "pre-commit: non-ignored untracked files exist; decide their tracking before committing.",
+  "index_exists": false,
+  "tracked_files": [],
+  "branch": "main",
+  "remotes": []
+}

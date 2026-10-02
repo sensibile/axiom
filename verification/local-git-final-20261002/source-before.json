@@ -1,0 +1,7 @@
+{
+  "lib/axiom/domain.ex": "c83fc0dee90dc8af7021d946ade0eb5c9123bf7ea2c28bebd5e13fe0a8f7a76d",
+  "lib/axiom.ex": "a44a8a0b2b691ddc7c39f822798caf9a61b452b03e08debd9147aff2ee47611d",
+  "lib/axiom/test_database.ex": "8024a8a47494358be4f0e6a16a2414d2d9e0cca93e05caeb6d9bf7b13bd667b4",
+  "lib/mix/tasks/axiom.db.setup.ex": "feb2b72c2ebfed0905c4c4d3b7de474bc2dbefaabf0a2339c3326157b86296be",
+  "lib/mix/tasks/axiom.measure.ex": "509c14f2dc86c3e0e5307f0299ed926cbd4fadc7dc6facd2bc7a57e60e237e7b"
+}

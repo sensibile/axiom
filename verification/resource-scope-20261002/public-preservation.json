@@ -1,0 +1,7 @@
+{
+  "unchanged": true,
+  "tables": 9,
+  "initial_comparison": "raw byte comparison failed due to Mix compilation stdout; JSON content compared instead",
+  "baseline_timing": "after first isolated-schema scope suite; before final gates and legacy regressions",
+  "final_timing": "after final review gate and legacy independent regressions"
+}

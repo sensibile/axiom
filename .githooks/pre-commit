@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+# Reject any index/worktree mismatch; never stage, stash or rewrite user files.
+if ! git diff --quiet --no-ext-diff --; then
+  echo 'pre-commit: unstaged tracked changes exist; stage the intended complete state or resolve them manually.' >&2
+  exit 1
+fi
+if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo 'pre-commit: non-ignored untracked files exist; decide their tracking before committing.' >&2
+  exit 1
+fi
+exec ./scripts/check precommit

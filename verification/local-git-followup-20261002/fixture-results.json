@@ -1,0 +1,26 @@
+{
+  "staged_bad_worktree_good_rejected": 1,
+  "matching_snapshot_passed": 0,
+  "gate_failure_propagated": 7,
+  "untracked_rejected": 1,
+  "ignore_probes": {
+    "ignored": [
+      "local.sqlite3-wal",
+      "local.sqlite3-shm",
+      "data/rocksdb/CURRENT",
+      "data/rocksdb/000001.sst",
+      ".aws/credentials",
+      ".npmrc",
+      "nested/erl_crash.dump",
+      ".cache/fixture"
+    ],
+    "visible": [
+      ".env.example",
+      ".env.sample",
+      ".npmrc.example",
+      "test/fixtures/schema.sql",
+      "docs/rocksdb.md",
+      "verification/reproducer.exs"
+    ]
+  }
+}

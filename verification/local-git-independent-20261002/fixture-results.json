@@ -1,0 +1,47 @@
+{
+  "fixture": "/private/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-gate-fixture-62e4xood",
+  "hooks": {
+    "0": {
+      "exit": 0,
+      "output": ""
+    },
+    "7": {
+      "exit": 7,
+      "output": ""
+    }
+  },
+  "ignore": {
+    ".env": true,
+    ".env.production": true,
+    ".env.example": false,
+    "nested/.env": true,
+    "secret.pem": true,
+    "secret.key": true,
+    "local.db": true,
+    "local.db-wal": true,
+    "local.sqlite3": true,
+    "local.sqlite3-wal": false,
+    "local.sqlite3-shm": false,
+    "data/rocksdb/CURRENT": false,
+    "data/rocksdb/000001.sst": false,
+    ".aws/credentials": false,
+    ".npmrc": false,
+    ".cache/foo": false,
+    "target/x": false,
+    "_build/x": true,
+    "elixir/_build/x": false,
+    "elixir/deps/x": false,
+    "deps/x": true,
+    "nested/erl_crash.dump": false,
+    "elixir/erl_crash.dump": false,
+    "__pycache__/x.pyc": true
+  },
+  "working_tree_format": {
+    "exit": 0,
+    "output": ""
+  },
+  "staged_materialized_format": {
+    "exit": 1,
+    "output": "mix format failed for file: lib/probe.ex\n** (MismatchedDelimiterError) mismatched delimiter found on lib/probe.ex:3:1:\n    error: unexpected reserved word: end\n    \u2502\n  2 \u2502 def value, do: (\n    \u2502                \u2514 unclosed delimiter\n  3 \u2502 end\n    \u2502 \u2514 mismatched closing delimiter (expected \")\")\n    \u2502\n    \u2514\u2500 lib/probe.ex:3:1\n    (elixir 1.20.4) lib/code.ex:1123: Code.format_string!/2\n    (mix 1.20.4) lib/mix/tasks/format.ex:743: Mix.Tasks.Format.elixir_format/2\n    (mix 1.20.4) lib/mix/tasks/format.ex:764: Mix.Tasks.Format.format_file/2\n    (elixir 1.20.4) lib/task/supervised.ex:105: Task.Supervised.invoke_mfa/2\n    (elixir 1.20.4) lib/task/supervised.ex:40: Task.Supervised.reply/4\n"
+  }
+}

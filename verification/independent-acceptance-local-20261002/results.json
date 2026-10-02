@@ -1,0 +1,144 @@
+[
+  {
+    "command": [
+      "git",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0,
+    "raw": "/Users/tonton/Documents/workspace/alaya/axiom\n"
+  },
+  {
+    "command": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0,
+    "raw": "main\n"
+  },
+  {
+    "command": [
+      "git",
+      "rev-parse",
+      "--verify",
+      "HEAD"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 128,
+    "raw": "fatal: Needed a single revision\n"
+  },
+  {
+    "command": [
+      "git",
+      "config",
+      "--local",
+      "--get",
+      "core.hooksPath"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0,
+    "raw": ".githooks\n"
+  },
+  {
+    "command": [
+      "git",
+      "remote"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0,
+    "raw": ""
+  },
+  {
+    "command": [
+      "git",
+      "hook",
+      "run",
+      "pre-commit"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 1,
+    "raw": "pre-commit: non-ignored untracked files exist; decide their tracking before committing.\n"
+  },
+  {
+    "command": [
+      "cp",
+      "-cR",
+      "/Users/tonton/Documents/workspace/alaya/axiom/_build",
+      "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0,
+    "raw": ""
+  },
+  {
+    "command": [
+      "./scripts/check",
+      "precommit"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0
+  },
+  {
+    "command": [
+      "./scripts/check",
+      "review"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 0
+  },
+  {
+    "command": [
+      "elixir",
+      "/Users/tonton/Documents/workspace/alaya/axiom/verification/local-git-final-20261002/behavior-equivalence.exs"
+    ],
+    "cwd": "/Users/tonton/Documents/workspace/alaya/axiom",
+    "exit": 1,
+    "raw": "warning: Jason.encode!/1 is undefined (module Jason is not available or is yet to be defined). Make sure the module name is correct and has been specified in full (or that an alias has been defined)\n\u2514\u2500 nofile:93:49: BeforeCleanup.Domain.canonical/1\n\u2514\u2500 nofile:99:35: BeforeCleanup.Domain.canonical/1\n\n** (RuntimeError) policy behavior differs\n    verification/local-git-final-20261002/behavior-equivalence.exs:16: anonymous fn/4 in :elixir_compiler_0.__FILE__/1\n    (elixir 1.20.4) lib/enum.ex:2622: Enum.\"-reduce/3-lists^foldl/2-0-\"/3\n    verification/local-git-final-20261002/behavior-equivalence.exs:13: (file)\n"
+  },
+  {
+    "command": [
+      "git",
+      "hook",
+      "run",
+      "pre-commit"
+    ],
+    "cwd": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-staged-wx41coye",
+    "exit": 1,
+    "raw": "pre-commit: unstaged tracked changes exist; stage the intended complete state or resolve them manually.\n"
+  },
+  {
+    "command": [
+      "git",
+      "hook",
+      "run",
+      "pre-commit"
+    ],
+    "cwd": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-staged-wx41coye",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "hook",
+      "run",
+      "pre-commit"
+    ],
+    "cwd": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-staged-wx41coye",
+    "exit": 1,
+    "raw": "pre-commit: non-ignored untracked files exist; decide their tracking before committing.\n"
+  },
+  {
+    "command": [
+      "git",
+      "hook",
+      "run",
+      "pre-commit"
+    ],
+    "cwd": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-staged-wx41coye",
+    "exit": 7,
+    "raw": ""
+  }
+]

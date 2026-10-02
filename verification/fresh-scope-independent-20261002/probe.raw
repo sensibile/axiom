@@ -1,0 +1,23 @@
+warning: "xref: [exclude: ...]" in your mix.exs file is deprecated, instead use: "elixirc_options: [no_warn_undefined: ...]"
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:243: Mix.Tasks.Compile.Elixir.xref_exclude_opts/2
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:142: Mix.Tasks.Compile.Elixir.run/1
+  (mix 1.20.4) lib/mix/task.ex:502: anonymous fn/3 in Mix.Task.run_task/5
+  (mix 1.20.4) lib/mix/task.compiler.ex:299: Mix.Task.Compiler.run_compiler/2
+  (mix 1.20.4) lib/mix/task.compiler.ex:287: Mix.Task.Compiler.run/4
+  (mix 1.20.4) lib/mix/tasks/compile.all.ex:75: Mix.Tasks.Compile.All.do_run/2
+
+verified_identity: %{
+  version: 170010,
+  user: "axiom_test",
+  address: "192.168.215.2/32",
+  database: "axiom_test",
+  server_port: 5432
+}
+Running ExUnit with seed: 20261002, max_cases: 20
+
+...read_snapshot_trace: %{blocked_after_identity: true, snapshot_revision: 4, committed_revision: 6}
+..
+Finished in 0.6 seconds (0.2s on load, 0.00s async, 0.3s sync)
+
+Result: 5 passed
+public_preserved: true

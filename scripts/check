@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+export HEX_OFFLINE=1
+static() {
+  mix format --check-formatted
+  MIX_ENV=dev mix compile --force --warnings-as-errors
+  MIX_ENV=test mix compile --force --warnings-as-errors
+  mix credo --strict
+}
+fast() {
+  set --
+  for path in _build/test/lib/*/ebin; do set -- "$@" -pa "$path"; done
+  elixir "$@" -e 'ExUnit.start(autorun: false); Code.require_file("test/domain_test.exs"); result = ExUnit.run(); System.halt(if result.total > 0 and result.failures == 0, do: 0, else: 1)'
+}
+case "${1:-}" in
+  format) mix format ;;
+  check) static ;;
+  test) MIX_ENV=test mix compile --warnings-as-errors; fast ;;
+  precommit) static; fast ;;
+  review) static; fast; mix dialyzer; mix test --warnings-as-errors ;;
+  *) echo 'usage: scripts/check format|check|test|precommit|review' >&2; exit 2 ;;
+esac

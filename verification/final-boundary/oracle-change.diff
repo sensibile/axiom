@@ -1,0 +1,16 @@
+--- 
++++ 
+@@ -91,9 +91,12 @@
+     assert {:ok,_}=Axiom.save_draft(c,t,%{body()|"rules"=>List.duplicate(maxrule,100)},0)
+     assert {:ok,_}=Axiom.register_role(c,t,String.duplicate("a",64),4,"audit")
+     assert {:error,:invalid_identifier}=Axiom.register_role(c,t,String.duplicate("a",65),5,"audit")
+-    for r <- [-1,1.0,nil,9_223_372_036_854_775_807] do
++    # bigint max is a valid stored/CAS value; max+1 is invalid. See bigint-fix report.
++    for r <- [-1,1.0,nil,9_223_372_036_854_775_808] do
+       assert {:error,:invalid_revision}=Axiom.register_role(c,t,"next",r,"audit")
+     end
++    assert Axiom.Domain.revision(9_223_372_036_854_775_807)
++    assert {:error,:conflict}=Axiom.register_role(c,t,"next",9_223_372_036_854_775_807,"audit")
+     assert {:error,:assignment_not_found}=Axiom.put_assignment(c,t,"alice","reader","doc","revoked",5,"audit")
+     assert {:error,:relation_not_found}=Axiom.put_relation(c,t,"alice","member","team","revoked",5,"audit")
+     assert {:error,:invalid_assignment}=Axiom.put_assignment(c,t,"team","reader","alice","active",5,"audit")

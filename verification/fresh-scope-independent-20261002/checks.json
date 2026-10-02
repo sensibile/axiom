@@ -1,0 +1,57 @@
+[
+  {
+    "command": [
+      "mix",
+      "format",
+      "--check-formatted"
+    ],
+    "exit_code": 0,
+    "raw": "check-0.raw"
+  },
+  {
+    "command": [
+      "mix",
+      "format",
+      "--check-formatted",
+      "verification/fresh-scope-independent-20261002/probe.exs"
+    ],
+    "exit_code": 1,
+    "raw": "check-1.raw"
+  },
+  {
+    "command": [
+      "mix",
+      "compile",
+      "--force",
+      "--warnings-as-errors"
+    ],
+    "exit_code": 0,
+    "raw": "check-2.raw"
+  },
+  {
+    "command": [
+      "mix",
+      "credo",
+      "--strict"
+    ],
+    "exit_code": 0,
+    "raw": "check-3.raw"
+  },
+  {
+    "command": [
+      "mix",
+      "test",
+      "--warnings-as-errors"
+    ],
+    "exit_code": 0,
+    "raw": "check-4.raw"
+  },
+  {
+    "command": [
+      "mix",
+      "dialyzer"
+    ],
+    "exit_code": 0,
+    "raw": "check-5.raw"
+  }
+]

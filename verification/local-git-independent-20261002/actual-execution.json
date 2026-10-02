@@ -1,0 +1,10 @@
+{
+  "command": "./scripts/check review",
+  "exit": 0,
+  "stdout_log": "/tmp/alaya-independent-gates-20261002/axiom-review-authorized.log",
+  "stdout_sha256": "e90c2e0c25574f74b64ceff5bdc6bbc6cc6e2bac5830d50a5762ce205b05bb80",
+  "actual_test_summaries": [
+    "Result: 3 passed",
+    "Result: 16 passed"
+  ]
+}

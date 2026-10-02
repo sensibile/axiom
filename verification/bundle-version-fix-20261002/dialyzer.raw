@@ -1,0 +1,29 @@
+warning: "xref: [exclude: ...]" in your mix.exs file is deprecated, instead use: "elixirc_options: [no_warn_undefined: ...]"
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:243: Mix.Tasks.Compile.Elixir.xref_exclude_opts/2
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:142: Mix.Tasks.Compile.Elixir.run/1
+  (mix 1.20.4) lib/mix/task.ex:502: anonymous fn/3 in Mix.Task.run_task/5
+  (mix 1.20.4) lib/mix/task.compiler.ex:299: Mix.Task.Compiler.run_compiler/2
+  (mix 1.20.4) lib/mix/task.compiler.ex:287: Mix.Task.Compiler.run/4
+  (mix 1.20.4) lib/mix/tasks/compile.all.ex:75: Mix.Tasks.Compile.All.do_run/2
+
+Finding suitable PLTs
+Checking PLT...
+[:asn1, :axiom, :compiler, :crypto, :db_connection, :decimal, :elixir, :jason, :kernel, :logger, :mix, :postgrex, :public_key, :ssl, :stdlib, :telemetry]
+PLT is up to date!
+No :ignore_warnings opt specified in mix.exs and default does not exist.
+
+Starting Dialyzer
+[
+  check_plt: false,
+  init_plt: ~c".cache/plt/project.plt/dialyxir_erlang-29.1.1_elixir-1.20.4_deps-dev.plt",
+  files: [~c"/Users/tonton/Documents/workspace/alaya/axiom/_build/dev/lib/axiom/ebin/Elixir.Axiom.Domain.beam",
+   ~c"/Users/tonton/Documents/workspace/alaya/axiom/_build/dev/lib/axiom/ebin/Elixir.Axiom.Scope.beam",
+   ~c"/Users/tonton/Documents/workspace/alaya/axiom/_build/dev/lib/axiom/ebin/Elixir.Axiom.Store.beam",
+   ~c"/Users/tonton/Documents/workspace/alaya/axiom/_build/dev/lib/axiom/ebin/Elixir.Axiom.TestDatabase.beam",
+   ~c"/Users/tonton/Documents/workspace/alaya/axiom/_build/dev/lib/axiom/ebin/Elixir.Axiom.beam",
+   ...],
+  ...
+]
+Total errors: 0, Skipped: 0, Unnecessary Skips: 0
+done in 0m1.77s
+done (passed successfully)

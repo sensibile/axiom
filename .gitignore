@@ -1,0 +1,40 @@
+/_build/
+/deps/
+/erl_crash.dump
+
+# Local secrets, runtime data and caches (keep example configuration).
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+.DS_Store
+__pycache__/
+*.pyc
+/erl_crash.dump
+
+# Raw execution logs; reports and executable reproducers remain trackable.
+/verification/**/*.log
+/verification/**/*.dump
+/verification/**/*.beam
+
+# Exact runtime/credential paths; source, examples and reports stay visible.
+*.sqlite3-wal
+*.sqlite3-shm
+erl_crash.dump
+/.aws/credentials
+/.npmrc
+/data/rocksdb/
+/.cache/
+
+# Explicit example certificates/keys and test fixtures may be reviewed and tracked.
+!*.pem.example
+!*.key.example
+!**/test/fixtures/**/*.pem
+!**/test/fixtures/**/*.key

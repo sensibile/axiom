@@ -1,0 +1,47 @@
+[
+  {
+    "count": 3287,
+    "table": "axiom_assignment_events",
+    "digest": "8e092753a32e7e3b584305ad75ba56c1"
+  },
+  {
+    "count": 250,
+    "table": "axiom_assignments",
+    "digest": "59edc9a49ade1ab5bd9e7a0dcf6ff29b"
+  },
+  {
+    "count": 274,
+    "table": "axiom_drafts",
+    "digest": "1f20f01b195307e0fea0b64fed0d02fa"
+  },
+  {
+    "count": 1510,
+    "table": "axiom_nodes",
+    "digest": "a40a0e3194dadd80a32268bdabced58d"
+  },
+  {
+    "count": 1427,
+    "table": "axiom_publications",
+    "digest": "0704fe56d85c988ed43f5058fefa17c8"
+  },
+  {
+    "count": 27,
+    "table": "axiom_relations",
+    "digest": "57c08b2d7ae39ae5779f7416678f5759"
+  },
+  {
+    "count": 594,
+    "table": "axiom_releases",
+    "digest": "3c033676fb666d789f12374db83da9a0"
+  },
+  {
+    "count": 469,
+    "table": "axiom_roles",
+    "digest": "c7df31c9f2eaa9f84745e48826508291"
+  },
+  {
+    "count": 448,
+    "table": "axiom_tenants",
+    "digest": "faa0d05b1b88acc78ca8574211804620"
+  }
+]

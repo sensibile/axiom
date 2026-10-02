@@ -1,0 +1,43 @@
+{
+  "fixture": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-stage-fixture-w9a2yte2",
+  "cases": {
+    "format-success": {
+      "exit": 0,
+      "trace": [
+        "mix format"
+      ]
+    },
+    "precommit-success": {
+      "exit": 0,
+      "trace": [
+        "mix format --check-formatted",
+        "mix compile --force --warnings-as-errors",
+        "mix compile --force --warnings-as-errors",
+        "elixir -pa _build/test/lib/*/ebin -e ExUnit.start(autorun: false); Code.require_file(\"test/domain_test.exs\"); result = ExUnit.run(); System.halt(if result.total > 0 and result.failures == 0, do: 0, else: 1)"
+      ]
+    },
+    "precommit-format": {
+      "exit": 7,
+      "trace": [
+        "mix format --check-formatted"
+      ]
+    },
+    "precommit-compile": {
+      "exit": 7,
+      "trace": [
+        "mix format --check-formatted",
+        "mix compile --force --warnings-as-errors"
+      ]
+    },
+    "review-success": {
+      "exit": 0,
+      "trace": [
+        "mix format --check-formatted",
+        "mix compile --force --warnings-as-errors",
+        "mix compile --force --warnings-as-errors",
+        "elixir -pa _build/test/lib/*/ebin -e ExUnit.start(autorun: false); Code.require_file(\"test/domain_test.exs\"); result = ExUnit.run(); System.halt(if result.total > 0 and result.failures == 0, do: 0, else: 1)",
+        "mix test --warnings-as-errors"
+      ]
+    }
+  }
+}

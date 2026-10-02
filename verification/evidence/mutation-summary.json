@@ -1,0 +1,42 @@
+[
+  {
+    "mutation": "read_committed",
+    "file": "lib/axiom/store.ex",
+    "before": "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY",
+    "after": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY",
+    "exit": 2,
+    "test_result": [
+      "Result: 9/11 passed"
+    ]
+  },
+  {
+    "mutation": "assignment_cas",
+    "file": "lib/axiom.ex",
+    "before": "Store.require!(tx, state.assignment_revision == revision, :conflict)",
+    "after": "Store.require!(tx, true, :conflict)",
+    "exit": 2,
+    "test_result": [
+      "Result: 9/11 passed"
+    ]
+  },
+  {
+    "mutation": "retry_fingerprint",
+    "file": "lib/axiom.ex",
+    "before": "[[^fingerprint, result]] ->",
+    "after": "[[_, result]] ->",
+    "exit": 2,
+    "test_result": [
+      "Result: 10/11 passed"
+    ]
+  },
+  {
+    "mutation": "rollback_revives",
+    "file": "lib/axiom.ex",
+    "before": "{release_id, reason}",
+    "after": "Store.query(tx, \"UPDATE axiom_assignments SET status='active' WHERE tenant_id=$1\", [tenant])\n        Store.query(tx, \"UPDATE axiom_nodes SET status='active' WHERE tenant_id=$1\", [tenant])\n        {release_id, reason}",
+    "exit": 2,
+    "test_result": [
+      "Result: 10/11 passed"
+    ]
+  }
+]

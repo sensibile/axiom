@@ -1,0 +1,22 @@
+{
+  "README.md": {
+    "original": "b32584a1282008610711e9bfac58f1730c247160de5eb2234134102668239846",
+    "current": "88dbd5c3b6ee1ae4e9745b8aef8cf90d0cbff1ca07ade5f1ed04aa6f33f9e870"
+  },
+  "VALIDATION.md": {
+    "original": "f152ca6e1cf739a860ec0935494bb12b3650d3d3e53d43b1419e7d4ab8f0bce6",
+    "current": "57fa3b4fe46a22a438cd973ac6792767e613ab7d7f399706448168a5a2f28f49"
+  },
+  "lib/axiom/domain.ex": {
+    "original": "891decbe384eb1622de5452973218afce2f15abf07d20e249f02cc0806e78efb",
+    "current": "c83fc0dee90dc8af7021d946ade0eb5c9123bf7ea2c28bebd5e13fe0a8f7a76d"
+  },
+  "lib/axiom/store.ex": {
+    "original": "f1215ab96fe04d808ae398f24ebf7ddcd01e721808997664c315330a816244fa",
+    "current": "00e71fc291139d93ad4a40e971e2c2fb56d0e6d6fa725c1d0d74041c56cc7d28"
+  },
+  "lib/axiom.ex": {
+    "original": "95e17e09afc0f576a321319ae92424a19d911139c86cba7269cbc81c7b66c9a6",
+    "current": "a44a8a0b2b691ddc7c39f822798caf9a61b452b03e08debd9147aff2ee47611d"
+  }
+}

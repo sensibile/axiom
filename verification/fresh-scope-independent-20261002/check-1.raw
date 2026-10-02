@@ -1,0 +1,27 @@
+** (Mix) mix format failed due to --check-formatted.
+The following files are not formatted:
+
+[1m[31m/Users/tonton/Documents/workspace/alaya/axiom/verification/fresh-scope-independent-20261002/probe.exs
+[0m
+         |
+ 20  20  |    version: version,
+ 21  21  |    address: address
+ 22     -|  }, label: "verified_identity")
+     22 +|  },
+     23 +|  label: "verified_identity"
+     24 +|)
+ 23  25  |
+ 24  26  |public = fn ->
+         |
+357 359  |        snapshot_revision: observed["assignment_revision"],
+358 360  |        committed_revision: current["assignment_revision"]
+359     -|      }, label: "read_snapshot_trace")
+    361 +|      },
+    362 +|      label: "read_snapshot_trace"
+    363 +|    )
+360 364  |
+361 365  |    GenServer.stop(holder_conn)
+         |
+
+
+

@@ -1,0 +1,34 @@
+warning: "xref: [exclude: ...]" in your mix.exs file is deprecated, instead use: "elixirc_options: [no_warn_undefined: ...]"
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:243: Mix.Tasks.Compile.Elixir.xref_exclude_opts/2
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:142: Mix.Tasks.Compile.Elixir.run/1
+  (mix 1.20.4) lib/mix/task.ex:502: anonymous fn/3 in Mix.Task.run_task/5
+  (mix 1.20.4) lib/mix/task.compiler.ex:299: Mix.Task.Compiler.run_compiler/2
+  (mix 1.20.4) lib/mix/task.compiler.ex:287: Mix.Task.Compiler.run/4
+  (mix 1.20.4) lib/mix/tasks/compile.all.ex:75: Mix.Tasks.Compile.All.do_run/2
+
+fixture_run_namespace: "22470829d7b34124"
+verified_identity: %{
+  version: 170010,
+  user: "axiom_test",
+  address: "192.168.215.2/32",
+  database: "axiom_test",
+  server_port: 5432
+}
+Running ExUnit with seed: 20261002, max_cases: 20
+
+barrier_fixture: {1, 1}
+..event_oracle: {:assignment, "active", 5}
+event_oracle: {:assignment, "revoked", 6}
+event_oracle: {:assignment, "active", 7}
+event_oracle: {:assignment, "active", 8}
+event_oracle: {:relation, "active", 9}
+event_oracle: {:relation, "revoked", 10}
+event_oracle: {:relation, "active", 11}
+event_oracle: {:status, "suspended", 12}
+event_oracle: {:status, "active", 13}
+event_oracle: {:status, "active", 14}
+.
+Finished in 0.9 seconds (0.3s on load, 0.00s async, 0.5s sync)
+
+Result: 3 passed
+public_preserved: true

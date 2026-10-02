@@ -1,0 +1,7 @@
+for name <- ~w(decimal telemetry db_connection jason postgrex), do: Code.prepend_path("_build/dev/lib/#{name}/ebin")
+Code.require_file("lib/axiom/test_database.ex")
+{:ok, _} = Application.ensure_all_started(:postgrex)
+{:ok, c} = Postgrex.start_link(Axiom.TestDatabase.options())
+IO.inspect(Postgrex.query!(c, "SELECT current_database(),current_user,inet_server_addr()::text,inet_server_port(),version()", []).rows, label: "identity")
+IO.inspect(Postgrex.query!(c, "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE 'axiom_%' ORDER BY table_name", []).rows, label: "schema names only")
+GenServer.stop(c)

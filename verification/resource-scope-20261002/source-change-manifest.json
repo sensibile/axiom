@@ -1,0 +1,27 @@
+{
+  "changed_existing": [
+    "lib/axiom.ex",
+    "lib/axiom/store.ex",
+    "lib/axiom/test_database.ex",
+    "priv/schema.sql",
+    "README.md",
+    "PAP_PRP_DESIGN.md",
+    "VALIDATION.md"
+  ],
+  "new_sources": [
+    "lib/axiom/scope.ex",
+    "test/resource_scope_test.exs"
+  ],
+  "preserved_existing": [
+    "lib/axiom/domain.ex",
+    "lib/mix/tasks/axiom.measure.ex",
+    "lib/mix/tasks/axiom.db.setup.ex",
+    "test/counter_exhaustion_test.exs",
+    "test/service_test.exs",
+    "test/domain_test.exs",
+    "test/test_helper.exs",
+    "scripts/check",
+    "mix.exs"
+  ],
+  "git_state": "main; no HEAD/index commit; all existing files were untracked"
+}

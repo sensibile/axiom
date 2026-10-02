@@ -1,0 +1,20 @@
+{
+  "lib/axiom.ex": "97f2a6df29eb8f1e8b837758a24836fdd6653390c318b46bcce794f6a5ceec66",
+  "lib/axiom/store.ex": "d755552700d1bf70e718d6c5f4472528c8c0bec6fd628e4263e35eae7a9dcbf4",
+  "lib/axiom/test_database.ex": "91fbd7f509cbb26bf0b7e938e4c85b49ed34194e4b752378d9ddc3f431bfeb10",
+  "lib/axiom/domain.ex": "e13537f35e2cdf29ddc4f436314a8e0723dfb4deb4cd1c6e4906958777a7abc7",
+  "lib/mix/tasks/axiom.measure.ex": "6f9e03454e6ed76493b36a86a6a2e2eb8ab2fc5732ae60dca4759c7a1b0045ee",
+  "lib/mix/tasks/axiom.db.setup.ex": "942bfd18b83bb60af01e64314529b2d58358ad1f8a0a8fdb12ed651cb4a06e95",
+  "test/counter_exhaustion_test.exs": "3b41f266caec317048ed6014bdd1bfab3e1f4311f609cc7071dbd97ba28aa4b9",
+  "test/service_test.exs": "9c5a96a195ec0c58d022b3afa9c5fb260edc62d7d151a94782da2c5cabac6618",
+  "test/domain_test.exs": "a86f0a3b463a59b4e0e44c2b848ae2edb5705b18493c79dcf390c9a3ec5239c1",
+  "test/test_helper.exs": "5114084f8ac93c71621d1d2735cdb40ca02d0c4c6eeba3d44f369bbc94788131",
+  "priv/schema.sql": "47c1071eab20d26b469df1f3a07f7844c3cb83d24a20ff7e7ec5a1dda812c1a0",
+  "scripts/check": "a63964aa8681d329a9cae35a9cdaa771b276d6d571972f74bb3b2e35c719bd0d",
+  "README.md": "c16a4498fe5c5b0532d92417160ce8a3c7b678c79c2f02ab26c035cb0ab006a7",
+  "PAP_PRP_DESIGN.md": "d27c2be840cbb68a8461940b53b1ea047b10d8f02393f6d7e74223d60a9a7017",
+  "VALIDATION.md": "498020df3075d58e0439dea644892f9c77e49d5b027a541b1ec3d1e59df9e021",
+  "mix.exs": "9d95826fe956d02efd743898ce49bb0e2aa8bd9f75bbfa65f6f10ae2cae1198d",
+  "lib/axiom/scope.ex": "ad06f9d6fae3ef848a51cc6d10d2bc2353a4f2b79bdca9a42ada765be2d82e94",
+  "test/resource_scope_test.exs": "0ea5757d113b4440b01d423a588f89a7ee7d4493536cd039896f5cab364176ff"
+}

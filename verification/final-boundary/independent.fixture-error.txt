@@ -1,0 +1,116 @@
+defmodule FinalBoundaryIndependent do
+  use ExUnit.Case, async: false
+  alias Axiom.Store
+  @m 9223372036854775807
+  defp body(a), do: %{"schema_version"=>1,"rules"=>[%{"effect"=>"allow","role"=>"reader","actions"=>[a],"resource_kind"=>"document"}]}
+  defp fixture(c) do
+    t="final-boundary-"<>Base.encode16(:crypto.strong_rand_bytes(12),case: :lower)
+    {:ok,_}=Axiom.create_tenant(c,t)
+    {:ok,_}=Axiom.register_role(c,t,"reader",0,"audit")
+    {:ok,_}=Axiom.register_node(c,t,"alice","person",1,"audit")
+    {:ok,_}=Axiom.register_node(c,t,"doc","document",2,"audit")
+    {:ok,_}=Axiom.register_node(c,t,"team","team",3,"audit")
+    IO.puts("fixture #{t}")
+    t
+  end
+  defp rows(c,t) do
+    for table <- ~w(axiom_tenants axiom_roles axiom_nodes axiom_drafts axiom_releases axiom_assignments axiom_relations axiom_assignment_events axiom_publications), into: %{} do
+      key=if table=="axiom_tenants",do: "id",else: "tenant_id"
+      {table,Store.query(c,"SELECT row_to_json(r)::text FROM #{table} r WHERE #{key}=$1 ORDER BY row_to_json(r)::text",[t])}
+    end
+  end
+  test "independent integer oracle and full-row terminal atomicity" do
+    c=Application.fetch_env!(:axiom,:test_conn)
+    :rand.seed(:exsss,{811,2026,991})
+    values=[0,1,9007199254740991,9007199254740992,@m-2,@m-1,@m]++Enum.map(1..25,fn _->@m-:rand.uniform(500) end)
+    for {v,i}<-Enum.with_index(values) do
+      t=fixture(c)
+      {:ok,_}=Axiom.save_draft(c,t,body("read"),0)
+      Store.query(c,"UPDATE axiom_tenants SET assignment_revision=$2,policy_generation=$2 WHERE id=$1",[t,v])
+      # Draft strictly positive; the zero entry uses revision 1.
+      d=max(1,v)
+      Store.query(c,"UPDATE axiom_drafts SET revision=$2 WHERE tenant_id=$1",[t,d])
+      {:ok,draft}=Axiom.draft(c,t)
+      assert draft["draft_revision"]==d
+      {:ok,s}=Axiom.snapshot(c,t,"alice")
+      assert s["data"]["assignment_revision"]==v
+      assert Jason.decode!(Jason.encode!(s))["data"]["assignment_revision"]==v
+      before=rows(c,t)
+      expected=if v==@m,do: {:error,:revision_exhausted},else: {:ok,%{"assignment_revision"=>v+1}}
+      assert Axiom.set_principal_status(c,t,"alice","suspended",v,"audit")==expected
+      if v==@m,do: assert(rows(c,t)==before)
+      pub=Axiom.publish(c,t,d,v,"publish","audit")
+      if v==@m do
+        assert pub=={:error,:revision_exhausted}
+        assert rows(c,t)==before
+      else
+        assert {:ok,p}=pub
+        assert p["policy_generation"]==v+1
+        assert {:ok,^p}=Axiom.publish(c,t,d,v,"publish","audit")
+        [[stored]]=Store.query(c,"SELECT result FROM axiom_publications WHERE tenant_id=$1 AND request_id='publish'",[t])
+        assert stored==p
+        assert {:error,:idempotency_conflict}=Axiom.publish(c,t,d,v,"publish","changed")
+      end
+      draft_before=rows(c,t)
+      result=Axiom.save_draft(c,t,body("write"),d)
+      if d==@m do
+        assert result=={:error,:revision_exhausted}
+        assert rows(c,t)==draft_before
+      else
+        assert result=={:ok,%{"draft_revision"=>d+1}}
+      end
+      IO.inspect(%{case: i,input: v,draft: d,assignment: expected,publication: pub},label: "reference case")
+    end
+  end
+  test "terminal rollback retry preserves revoked facts and all rows; both tenants isolated" do
+    c=Application.fetch_env!(:axiom,:test_conn)
+    t=fixture(c); other=fixture(c)
+    {:ok,_}=Axiom.save_draft(c,t,body("read"),0)
+    {:ok,p}=Axiom.publish(c,t,1,0,"first","audit")
+    id=p["policy_release_id"]
+    {:ok,_}=Axiom.put_assignment(c,t,"alice","reader","doc","active",4,"audit")
+    {:ok,_}=Axiom.put_relation(c,t,"alice","member","team","active",5,"audit")
+    {:ok,_}=Axiom.put_assignment(c,t,"alice","reader","doc","revoked",6,"audit")
+    {:ok,_}=Axiom.put_relation(c,t,"alice","member","team","revoked",7,"audit")
+    {:ok,_}=Axiom.set_principal_status(c,t,"alice","suspended",8,"audit")
+    other_before=rows(c,other)
+    assert {:error,:release_not_found}=Axiom.rollback_policy(c,other,id,0,"cross","audit","test")
+    assert rows(c,other)==other_before
+    Store.query(c,"UPDATE axiom_tenants SET policy_generation=$2 WHERE id=$1",[t,@m-1])
+    {:ok,r}=Axiom.rollback_policy(c,t,id,@m-1,"terminal","audit","reason")
+    assert r["policy_generation"]==@m
+    full=rows(c,t)
+    assert {:ok,^r}=Axiom.rollback_policy(c,t,id,@m-1,"terminal","audit","reason")
+    assert rows(c,t)==full
+    assert {:error,:revision_exhausted}=Axiom.rollback_policy(c,t,id,@m,"fresh","audit","reason")
+    assert {:error,:revision_exhausted}=Axiom.publish(c,t,1,@m,"fresh-publish","audit")
+    assert rows(c,t)==full
+    assert {:error,:idempotency_conflict}=Axiom.rollback_policy(c,t,id,@m-1,"terminal","audit","changed")
+    {:ok,s}=Axiom.snapshot(c,t,"alice",release_id: id)
+    assert s["data"]["principal_status"]=="suspended"
+    assert s["data"]["assignment_revision"]==9
+    assert [%{"status"=>"revoked"}]=s["data"]["assignments"]
+    assert [%{"status"=>"revoked"}]=s["data"]["relations"]
+    {:ok,_}=Axiom.set_principal_status(c,t,"alice","active",9,"audit")
+    assert {:ok,^r}=Axiom.rollback_policy(c,t,id,@m-1,"terminal","audit","reason")
+    IO.inspect(%{terminal_result: r,rows: full},label: "terminal raw evidence")
+  end
+  test "invalid API input reference table preserves full rows" do
+    c=Application.fetch_env!(:axiom,:test_conn); t=fixture(c)
+    before=rows(c,t)
+    for v<-[-1,@m+1,nil,1.0,"9223372036854775807",%{},[],true] do
+      assert {:error,:invalid_revision}=Axiom.register_role(c,t,"next",v,"audit")
+      assert {:error,:invalid_revision}=Axiom.save_draft(c,t,body("read"),v)
+      assert {:error,:invalid_revision}=Axiom.publish(c,t,1,v,"invalid","audit")
+      assert rows(c,t)==before
+    end
+    for v<-[%{},[],nil,1.0,@m+1,<<255>>] do
+      assert {:error,:invalid_argument}=Axiom.publish(c,t,v,0,"invalid","audit")
+      assert rows(c,t)==before
+    end
+    for bad<-["a' OR 1=1--","a\n","../a",String.duplicate("a",65),<<255>>,nil,%{}] do
+      assert {:error,:invalid_identifier}=Axiom.register_role(c,t,bad,4,"audit")
+      assert rows(c,t)==before
+    end
+  end
+end

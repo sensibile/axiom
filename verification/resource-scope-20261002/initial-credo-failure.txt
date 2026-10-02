@@ -1,0 +1,4 @@
+First scripts/check review stopped at Credo strict with exit 8.
+lib/axiom.ex:421:7 Axiom.snapshot cyclomatic complexity 11 (maximum 9).
+Resolved by extracting snapshot_scope!/3 and bind_snapshot/3 without changing query order or transaction boundary.
+The first run did not reach Dialyzer or actual PG tests; final-review.log is the subsequent complete run.

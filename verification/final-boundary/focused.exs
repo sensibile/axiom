@@ -1,0 +1,6 @@
+{:ok,_}=Application.ensure_all_started(:postgrex)
+{:ok,c}=Postgrex.start_link(Axiom.TestDatabase.options())
+Process.unlink(c)
+Application.put_env(:axiom,:test_conn,c)
+ExUnit.start(seed: 8102026)
+Code.require_file("verification/final-boundary/independent.exs")

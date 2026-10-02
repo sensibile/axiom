@@ -1,0 +1,11 @@
+{
+  "source_hash_mismatches": [],
+  "config_and_hook_sha256": {
+    ".git/config": "7dbcbd267b3fe122b111f57243ad4dd4e12ad21df357064a4d0b4d21dcc4309c",
+    ".gitignore": "9c2c33d2cafed5543ce6f0c244f2db36170e35eee263a2336f09251be03da733",
+    ".githooks/pre-commit": "e423d83ce50b6dd6cf75cc8ad442dfdb39a30d37f4c0aac8ba8aeae6a8d43cab",
+    "scripts/check": "3fc007cf9595426607308dd7f7690dbf03be70cbc28463a24b1c170e9ccd62a9"
+  },
+  "index_exists": false,
+  "verified_at_utc": "2026-10-02T00:43:41.437936+00:00"
+}

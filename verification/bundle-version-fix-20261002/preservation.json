@@ -1,0 +1,13 @@
+{
+  "changed_existing_files": [
+    "lib/axiom.ex",
+    "lib/axiom/domain.ex",
+    "lib/axiom/scope.ex",
+    "test/domain_test.exs",
+    "test/resource_scope_test.exs"
+  ],
+  "original_independent_artifacts_preserved": true,
+  "probe_copy_byte_identical": true,
+  "regression_copy_byte_identical": true,
+  "public_rows_unchanged": true
+}

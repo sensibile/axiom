@@ -1,0 +1,31 @@
+{
+  "command": [
+    "elixir",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/axiom/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/bunt/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/credo/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/db_connection/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/decimal/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/dialyxir/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/erlex/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/file_system/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/jason/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/postgrex/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/telemetry/ebin",
+    "-e",
+    "ExUnit.start(autorun: false); Code.require_file(\"test/domain_test.exs\"); result = ExUnit.run(); System.halt(if result.total > 0 and result.failures == 0, do: 0, else: 1)"
+  ],
+  "exit": 0,
+  "raw": "Running ExUnit with seed: 840580, max_cases: 20\n\n...\nFinished in 0.01 seconds (0.01s async, 0.00s sync)\n\nResult: 3 passed\n"
+}

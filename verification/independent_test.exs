@@ -1,0 +1,206 @@
+defmodule IndependentVerification do
+  use ExUnit.Case, async: false
+  alias Axiom.Store
+  defp body(action \\ "read"), do: %{"schema_version" => 1, "rules" => [%{"effect" => "allow", "role" => "reader", "resource_kind" => "document", "actions" => [action]}]}
+  defp fresh(c) do
+    t = "verify-" <> Base.encode16(:crypto.strong_rand_bytes(8), case: :lower)
+    {:ok, _} = Axiom.create_tenant(c,t)
+    {:ok, _} = Axiom.register_role(c,t,"reader",0,"audit")
+    for {key,kind,r} <- [{"alice","person",1},{"doc","document",2},{"team","team",3}] do
+      {:ok, _} = Axiom.register_node(c,t,key,kind,r,"audit")
+    end
+    t
+  end
+  setup do
+    c=Application.fetch_env!(:axiom,:test_conn)
+    {:ok,c: c,t: fresh(c)}
+  end
+  defp observe(c,t) do
+    {:ok,s}=Axiom.snapshot(c,t,"alice")
+    {:ok,h}=Axiom.history(c,t)
+    {s["data"],h}
+  end
+
+  test "seeded independent state machine and replay oracle", %{c: c,t: t} do
+    :rand.seed(:exsss,{20261002,71,991})
+    initial=%{ar: 4,dr: 0,g: 0,head: nil,releases: %{},status: "active",a: nil,rel: nil,pubs: 0}
+    final=Enum.reduce(1..240,initial,fn step,m ->
+      action=:rand.uniform(9)
+      next=case action do
+        1 ->
+          b=body(if rem(step,2)==0,do: "write",else: "read")
+          assert {:ok,%{"draft_revision" => dr}}=Axiom.save_draft(c,t,b,m.dr)
+          assert dr==m.dr+1
+          Map.merge(m,%{dr: dr,draft: b})
+        2 when m.dr>0 ->
+          assert {:ok,p}=Axiom.publish(c,t,m.dr,m.g,"p-#{step}","audit")
+          id=p["policy_release_id"]
+          %{m|g: m.g+1,head: id,releases: Map.put(m.releases,id,m.draft),pubs: m.pubs+1}
+        3 when map_size(m.releases)>0 ->
+          id=Enum.at(Enum.sort(Map.keys(m.releases)),rem(step,map_size(m.releases)))
+          assert {:ok,_}=Axiom.rollback_policy(c,t,id,m.g,"r-#{step}","audit","independent")
+          %{m|g: m.g+1,head: id,pubs: m.pubs+1}
+        4 ->
+          st=if m.a=="active",do: "revoked",else: "active"
+          assert {:ok,_}=Axiom.put_assignment(c,t,"alice","reader","doc",st,m.ar,"audit")
+          %{m|a: st,ar: m.ar+1}
+        5 ->
+          st=if m.rel=="active",do: "revoked",else: "active"
+          assert {:ok,_}=Axiom.put_relation(c,t,"alice","member","team",st,m.ar,"audit")
+          %{m|rel: st,ar: m.ar+1}
+        6 ->
+          st=if m.status=="active",do: "suspended",else: "active"
+          assert {:ok,_}=Axiom.set_principal_status(c,t,"alice",st,m.ar,"audit")
+          %{m|status: st,ar: m.ar+1}
+        7 ->
+          assert {:error,:conflict}=Axiom.set_principal_status(c,t,"alice","active",m.ar-1,"audit")
+          m
+        8 ->
+          assert {:error,:unknown_role}=Axiom.save_draft(c,t,put_in(body(),["rules",Access.at(0),"role"],"missing"),m.dr)
+          m
+        _ -> m
+      end
+      {d,h}=observe(c,t)
+      assert d["assignment_revision"]==next.ar
+      assert d["policy_generation"]==next.g
+      assert d["principal_status"]==next.status
+      assert Enum.map(d["assignments"],& &1["status"])==if(next.a,do: [next.a],else: [])
+      assert Enum.map(d["relations"],& &1["status"])==if(next.rel,do: [next.rel],else: [])
+      assert Enum.map(h["assignments"],&hd/1)==Enum.to_list(1..next.ar)
+      assert length(h["publications"])==next.pubs
+      assert (d["policy"] && d["policy"]["release_id"])==next.head
+      for {id,b} <- next.releases do
+        {:ok,s}=Axiom.snapshot(c,t,"alice",release_id: id)
+        assert s["data"]["policy"]["body"]==b
+        assert s["data"]["assignment_revision"]==next.ar
+        assert s["data"]["principal_status"]==next.status
+      end
+      next
+    end)
+    IO.puts("MODEL seed=20261002 steps=240 final=#{inspect(final)}")
+  end
+
+  test "policy boundary table validates maximum and rejected inputs atomically", %{c: c,t: t} do
+    rule=hd(body()["rules"])
+    for {b,label} <- [{%{body()|"rules"=>[]},"empty"},{%{body()|"rules"=>List.duplicate(rule,101)},"101rules"},{put_in(body(),["rules",Access.at(0),"actions"],Enum.map(1..33,&"a#{&1}")),"33actions"},{put_in(body(),["rules",Access.at(0),"actions"],["read","read"]),"duplicate"},{put_in(body(),["rules",Access.at(0),"effect"],"permit"),"effect"},{put_in(body(),["rules",Access.at(0),"resource_kind"],"team"),"kind"},{Map.put(body(),"unknown",1),"field"}] do
+      assert {:error,_}=Axiom.save_draft(c,t,b,0),label
+      assert {:error,:draft_not_found}=Axiom.draft(c,t)
+      assert elem(observe(c,t),0)["assignment_revision"]==4
+    end
+    maxrule=%{rule|"actions"=>Enum.map(1..32,&"a#{&1}")}
+    assert {:ok,_}=Axiom.save_draft(c,t,%{body()|"rules"=>List.duplicate(maxrule,100)},0)
+    assert {:ok,_}=Axiom.register_role(c,t,String.duplicate("a",64),4,"audit")
+    assert {:error,:invalid_identifier}=Axiom.register_role(c,t,String.duplicate("a",65),5,"audit")
+    # bigint max is a valid stored/CAS value; max+1 is invalid. See bigint-fix report.
+    for r <- [-1,1.0,nil,9_223_372_036_854_775_808] do
+      assert {:error,:invalid_revision}=Axiom.register_role(c,t,"next",r,"audit")
+    end
+    assert Axiom.Domain.revision(9_223_372_036_854_775_807)
+    assert {:error,:conflict}=Axiom.register_role(c,t,"next",9_223_372_036_854_775_807,"audit")
+    assert {:error,:assignment_not_found}=Axiom.put_assignment(c,t,"alice","reader","doc","revoked",5,"audit")
+    assert {:error,:relation_not_found}=Axiom.put_relation(c,t,"alice","member","team","revoked",5,"audit")
+    assert {:error,:invalid_assignment}=Axiom.put_assignment(c,t,"team","reader","alice","active",5,"audit")
+  end
+
+  test "barrier races draft and exact-request publication, discarded response retry after head moves", %{c: c,t: t} do
+    parent=self()
+    race=fn fun ->
+      tasks=for n<-1..12 do
+        Task.async(fn -> send(parent,{:ready,self()}); receive do :go -> fun.(n) end end)
+      end
+      for _<-tasks do assert_receive {:ready,_},5000 end
+      Enum.each(tasks,&send(&1.pid,:go))
+      Enum.map(tasks,&Task.await(&1,15000))
+    end
+    results=race.(fn n -> Axiom.save_draft(c,t,body("a#{n}"),0) end)
+    assert Enum.count(results,&match?({:ok,_},&1))==1
+    assert Enum.count(results,&(&1=={:error,:conflict}))==11
+    pubs=race.(fn _ -> Axiom.publish(c,t,1,0,"lost-response","audit") end)
+    assert Enum.all?(pubs,&(&1==hd(pubs)))
+    {:ok,first}=hd(pubs)
+    # A caller exits after commit and never returns the result to its consumer.
+    {pid,ref}=spawn_monitor(fn -> {:ok,_}=Axiom.rollback_policy(c,t,first["policy_release_id"],1,"lost-rollback","audit","response discarded"); exit(:normal) end)
+    assert_receive {:DOWN,^ref,:process,^pid,:normal},5000
+    assert {:ok,%{"policy_generation"=>2}}=Axiom.rollback_policy(c,t,first["policy_release_id"],1,"lost-rollback","audit","response discarded")
+    assert {:ok,^first}=Axiom.publish(c,t,1,0,"lost-response","audit")
+    assert {:error,:idempotency_conflict}=Axiom.publish(c,t,1,0,"lost-response","other")
+    assert {:error,:idempotency_conflict}=Axiom.rollback_policy(c,t,first["policy_release_id"],0,"lost-response","audit","other operation")
+    assert [[1]]=Store.query(c,"SELECT count(*) FROM axiom_releases WHERE tenant_id=$1",[t])
+    assert length(elem(observe(c,t),1)["publications"])==2
+  end
+
+  test "tenant identity collisions, etag isolation and all immutable audit tables", %{c: c,t: t} do
+    other=fresh(c)
+    for tenant <- [t,other] do
+      {:ok,_}=Axiom.save_draft(c,tenant,body(),0)
+      {:ok,_}=Axiom.publish(c,tenant,1,0,"same-request","audit")
+    end
+    {:ok,s}=Axiom.snapshot(c,t,"alice")
+    {:ok,o}=Axiom.snapshot(c,other,"alice",if_none_match: s["etag"])
+    assert o["status"]=="ok"
+    refute o["etag"]==s["etag"]
+    assert {:error,:release_not_found}=Axiom.snapshot(c,other,"alice",release_id: s["data"]["policy"]["release_id"])
+    for table<-~w(axiom_releases axiom_assignment_events axiom_publications), op<- ["UPDATE #{table} SET actor='changed'","DELETE FROM #{table}"] do
+      assert {:error,%Postgrex.Error{postgres: %{code: :check_violation}}}=Postgrex.query(c,op<>" WHERE tenant_id=$1",[t])
+    end
+    assert elem(observe(c,other),0)["assignment_revision"]==4
+  end
+  test "real API snapshot straddles a deterministic writer commit", %{c: c,t: t} do
+    {:ok,_}=Axiom.save_draft(c,t,body(),0)
+    {:ok,p}=Axiom.publish(c,t,1,0,"old","audit")
+    parent=self()
+    writer=Task.async(fn ->
+      Store.transaction(c,fn tx ->
+        Store.query(tx,"LOCK TABLE axiom_nodes IN ACCESS EXCLUSIVE MODE")
+        send(parent,:nodes_locked)
+        receive do :commit_pair -> :ok after 5000 -> raise "barrier timeout" end
+        {:ok,_}=Axiom.rollback_policy(tx,t,p["policy_release_id"],1,"new","audit","atomic pair")
+        {:ok,_}=Axiom.set_principal_status(tx,t,"alice","suspended",4,"audit")
+      end)
+    end)
+    assert_receive :nodes_locked,5000
+    reader=Task.async(fn -> Axiom.snapshot(c,t,"alice") end)
+    waiting=Enum.reduce_while(1..100,false,fn _,_ ->
+      rows=Store.query(c,"SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE 'SELECT kind,status FROM axiom_nodes%'")
+      if rows==[[1]], do: {:halt,true}, else: (Process.sleep(10); {:cont,false})
+    end)
+    send(writer.pid,:commit_pair)
+    assert {:ok,_}=Task.await(writer,10000)
+    assert waiting,"reader must be blocked after reading old tenant head"
+    assert {:ok,s}=Task.await(reader,10000)
+    assert s["data"]["policy_generation"]==1
+    assert s["data"]["assignment_revision"]==4
+    assert s["data"]["principal_status"]=="active"
+    assert {:ok,new}=Axiom.snapshot(c,t,"alice")
+    assert new["data"]["policy_generation"]==2
+    assert new["data"]["assignment_revision"]==5
+    assert new["data"]["principal_status"]=="suspended"
+  end
+
+  test "late audit insertion failure leaves no facts, release, head or occupied request", %{c: c,t: t} do
+    Store.query(c,"CREATE OR REPLACE FUNCTION axiom_verify_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.actor='verify-fail' AND NEW.tenant_id=TG_ARGV[0] THEN RAISE EXCEPTION 'verify late failure' USING ERRCODE='23514'; END IF; RETURN NEW; END $$")
+    for table<-~w(axiom_assignment_events axiom_publications) do
+      Store.query(c,"CREATE TRIGGER axiom_verify_fault BEFORE INSERT ON #{table} FOR EACH ROW EXECUTE FUNCTION axiom_verify_fault('#{t}')")
+    end
+    try do
+      old=observe(c,t)
+      assert {:error,:constraint}=Axiom.put_assignment(c,t,"alice","reader","doc","active",4,"verify-fail")
+      assert {:error,:constraint}=Axiom.put_relation(c,t,"alice","member","team","active",4,"verify-fail")
+      assert {:error,:constraint}=Axiom.set_principal_status(c,t,"alice","suspended",4,"verify-fail")
+      assert observe(c,t)==old
+      {:ok,_}=Axiom.save_draft(c,t,body(),0)
+      assert {:error,:constraint}=Axiom.publish(c,t,1,0,"retry-failed","verify-fail")
+      assert observe(c,t)==old
+      assert [[0]]=Store.query(c,"SELECT count(*) FROM axiom_releases WHERE tenant_id=$1",[t])
+      assert [[0]]=Store.query(c,"SELECT count(*) FROM axiom_publications WHERE tenant_id=$1",[t])
+    after
+      for table<-~w(axiom_assignment_events axiom_publications) do
+        Store.query(c,"DROP TRIGGER axiom_verify_fault ON #{table}")
+      end
+      Store.query(c,"DROP FUNCTION axiom_verify_fault()")
+    end
+    assert {:ok,p}=Axiom.publish(c,t,1,0,"retry-failed","verify-fail")
+    assert {:ok,^p}=Axiom.publish(c,t,1,0,"retry-failed","verify-fail")
+  end
+
+end

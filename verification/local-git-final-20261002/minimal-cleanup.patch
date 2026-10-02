@@ -1,0 +1,66 @@
+--- a/lib/axiom/domain.ex
++++ b/lib/axiom/domain.ex
+@@ -69 +69 @@
+-        not is_list(rule["actions"]) or length(rule["actions"]) not in 1..32 ->
++        not valid_actions?(rule["actions"]) ->
+@@ -72,4 +71,0 @@
+-        not identifiers(rule["actions"]) or
+-            length(Enum.uniq(rule["actions"])) != length(rule["actions"]) ->
+-          {:halt, {:error, :invalid_actions}}
+-
+@@ -81,0 +78,5 @@
++  defp valid_actions?(actions) do
++    is_list(actions) and length(actions) in 1..32 and identifiers(actions) and
++      length(Enum.uniq(actions)) == length(actions)
++  end
++
+--- a/lib/axiom/test_database.ex
++++ b/lib/axiom/test_database.ex
+@@ -6 +6 @@
+-      port: 55439,
++      port: 55_439,
+--- a/lib/axiom.ex
++++ b/lib/axiom.ex
+@@ -222,3 +222 @@
+-            case Domain.policy(body, Store.role_keys(tx, tenant)) do
+-              {:error, reason} ->
+-                Postgrex.rollback(tx, reason)
++            publish_release(tx, tenant, draft_revision, body, actor)
+@@ -226,11 +223,0 @@
+-              {:ok, body} ->
+-                [[id]] =
+-                  Store.query(
+-                    tx,
+-                    "INSERT INTO axiom_releases(tenant_id,draft_revision,body,digest,actor) VALUES($1,$2,$3,$4,$5) RETURNING id",
+-                    [tenant, draft_revision, body, Domain.digest(body), actor]
+-                  )
+-
+-                {id, "policy published"}
+-            end
+-
+@@ -244,0 +232,17 @@
++  end
++
++  defp publish_release(tx, tenant, draft_revision, body, actor) do
++    case Domain.policy(body, Store.role_keys(tx, tenant)) do
++      {:error, reason} ->
++        Postgrex.rollback(tx, reason)
++
++      {:ok, body} ->
++        [[id]] =
++          Store.query(
++            tx,
++            "INSERT INTO axiom_releases(tenant_id,draft_revision,body,digest,actor) VALUES($1,$2,$3,$4,$5) RETURNING id",
++            [tenant, draft_revision, body, Domain.digest(body), actor]
++          )
++
++        {id, "policy published"}
++    end
+--- a/lib/mix/tasks/axiom.db.setup.ex
++++ b/lib/mix/tasks/axiom.db.setup.ex
+@@ -1,0 +2 @@
++  @moduledoc "Create the schema in the project-only local test database."
+--- a/lib/mix/tasks/axiom.measure.ex
++++ b/lib/mix/tasks/axiom.measure.ex
+@@ -1,0 +2 @@
++  @moduledoc "Measure service boundary latency against the project-only test database."

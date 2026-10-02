@@ -1,0 +1,153 @@
+warning: "xref: [exclude: ...]" in your mix.exs file is deprecated, instead use: "elixirc_options: [no_warn_undefined: ...]"
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:243: Mix.Tasks.Compile.Elixir.xref_exclude_opts/2
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:142: Mix.Tasks.Compile.Elixir.run/1
+  (mix 1.20.4) lib/mix/task.ex:502: anonymous fn/3 in Mix.Task.run_task/5
+  (mix 1.20.4) lib/mix/task.compiler.ex:299: Mix.Task.Compiler.run_compiler/2
+  (mix 1.20.4) lib/mix/task.compiler.ex:287: Mix.Task.Compiler.run/4
+  (mix 1.20.4) lib/mix/tasks/compile.all.ex:75: Mix.Tasks.Compile.All.do_run/2
+
+fixture_run_namespace: "43c6bf877e741240"
+verified_identity: %{
+  version: 170010,
+  user: "axiom_test",
+  address: "192.168.215.2/32",
+  database: "axiom_test",
+  server_port: 5432
+}
+Running ExUnit with seed: 20261002, max_cases: 20
+
+float_reproducer: {"bundle_schema_version", 1.0,
+ {:ok,
+  %{
+    "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+    "revision_bundle" => %{
+      "assignment_revision" => 4,
+      "bundle_schema_version" => 1,
+      "data_schema_version" => 2,
+      "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+      "policy_generation" => 1,
+      "policy_head_release_id" => 98,
+      "policy_release_id" => 98,
+      "policy_selection" => "current",
+      "principal" => "alice",
+      "principal_status" => "active",
+      "resource_scope" => %{
+        "local_id" => "same",
+        "scenario_id" => "base",
+        "space_id" => "space",
+        "tenant_id" => "b43c6bf877e7412401826"
+      },
+      "tenant_id" => "b43c6bf877e7412401826"
+    },
+    "status" => "not_modified"
+  }}}
+float_reproducer: {"data_schema_version", 2.0,
+ {:ok,
+  %{
+    "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+    "revision_bundle" => %{
+      "assignment_revision" => 4,
+      "bundle_schema_version" => 1,
+      "data_schema_version" => 2,
+      "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+      "policy_generation" => 1,
+      "policy_head_release_id" => 98,
+      "policy_release_id" => 98,
+      "policy_selection" => "current",
+      "principal" => "alice",
+      "principal_status" => "active",
+      "resource_scope" => %{
+        "local_id" => "same",
+        "scenario_id" => "base",
+        "space_id" => "space",
+        "tenant_id" => "b43c6bf877e7412401826"
+      },
+      "tenant_id" => "b43c6bf877e7412401826"
+    },
+    "status" => "not_modified"
+  }}}
+
+
+  1) test float schema versions are rejected: minimal contract reproducer (IndependentBundleProbe)
+     verification/fresh-bundle-independent-20261002/probe.exs:182
+     Expected truthy, got false
+     code: assert Enum.all?(results, fn {_, got} -> got == {:error, :invalid_revision_bundle} end)
+     arguments:
+
+         # 1
+         [
+           {"bundle_schema_version",
+            {:ok,
+             %{
+               "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+               "revision_bundle" => %{
+                 "assignment_revision" => 4,
+                 "bundle_schema_version" => 1,
+                 "data_schema_version" => 2,
+                 "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+                 "policy_generation" => 1,
+                 "policy_head_release_id" => 98,
+                 "policy_release_id" => 98,
+                 "policy_selection" => "current",
+                 "principal" => "alice",
+                 "principal_status" => "active",
+                 "resource_scope" => %{
+                   "local_id" => "same",
+                   "scenario_id" => "base",
+                   "space_id" => "space",
+                   "tenant_id" => "b43c6bf877e7412401826"
+                 },
+                 "tenant_id" => "b43c6bf877e7412401826"
+               },
+               "status" => "not_modified"
+             }}},
+           {"data_schema_version",
+            {:ok,
+             %{
+               "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+               "revision_bundle" => %{
+                 "assignment_revision" => 4,
+                 "bundle_schema_version" => 1,
+                 "data_schema_version" => 2,
+                 "etag" => "\"7cb3a1ca903379dae663e69166fa0dbf78b600b9d2f90bd3d03ebbf6986016cb\"",
+                 "policy_generation" => 1,
+                 "policy_head_release_id" => 98,
+                 "policy_release_id" => 98,
+                 "policy_selection" => "current",
+                 "principal" => "alice",
+                 "principal_status" => "active",
+                 "resource_scope" => %{
+                   "local_id" => "same",
+                   "scenario_id" => "base",
+                   "space_id" => "space",
+                   "tenant_id" => "b43c6bf877e7412401826"
+                 },
+                 "tenant_id" => "b43c6bf877e7412401826"
+               },
+               "status" => "not_modified"
+             }}}
+         ]
+
+         # 2
+         #Function<1.49421548/1 in IndependentBundleProbe."test float schema versions are rejected: minimal contract reproducer"/1>
+
+     stacktrace:
+       verification/fresh-bundle-independent-20261002/probe.exs:190: (test)
+
+barrier_fixture: {99, 1}
+..event_oracle: {:assignment, "active", 5}
+event_oracle: {:assignment, "revoked", 6}
+event_oracle: {:assignment, "active", 7}
+event_oracle: {:assignment, "active", 8}
+event_oracle: {:relation, "active", 9}
+event_oracle: {:relation, "revoked", 10}
+event_oracle: {:relation, "active", 11}
+event_oracle: {:status, "suspended", 12}
+event_oracle: {:status, "active", 13}
+event_oracle: {:status, "active", 14}
+.
+Finished in 0.9 seconds (0.3s on load, 0.00s async, 0.6s sync)
+
+Result: 3/4 passed
+Failed: 1 test
+public_preserved: true

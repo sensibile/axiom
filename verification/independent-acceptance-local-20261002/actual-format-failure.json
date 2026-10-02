@@ -1,0 +1,11 @@
+{
+  "command": [
+    "git",
+    "hook",
+    "run",
+    "pre-commit"
+  ],
+  "cwd": "/var/folders/qp/t82xjwzj40scks9jv1nwlhv00000gn/T/axiom-staged-wx41coye",
+  "exit": 1,
+  "raw": "mix format failed for file: lib/axiom/domain.ex\n** (SyntaxError) invalid syntax found on lib/axiom/domain.ex:1:8:\n    error: syntax error before: 'STAGED'\n    \u2502\n  1 \u2502 BROKEN STAGED SYNTAX !\n    \u2502        ^\n    \u2502\n    \u2514\u2500 lib/axiom/domain.ex:1:8\n    (elixir 1.20.4) lib/code.ex:1123: Code.format_string!/2\n    (mix 1.20.4) lib/mix/tasks/format.ex:743: Mix.Tasks.Format.elixir_format/2\n    (mix 1.20.4) lib/mix/tasks/format.ex:764: Mix.Tasks.Format.format_file/2\n    (elixir 1.20.4) lib/task/supervised.ex:105: Task.Supervised.invoke_mfa/2\n    (elixir 1.20.4) lib/task/supervised.ex:40: Task.Supervised.reply/4\n"
+}

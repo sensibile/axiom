@@ -1,0 +1,9 @@
+{
+  "version": "17.10",
+  "user": "axiom_test",
+  "schema": "axiom_resource_scope_20261002",
+  "database": "axiom_test",
+  "server_port": 5432,
+  "head_fk": 1,
+  "scope_immutable_trigger": 1
+}

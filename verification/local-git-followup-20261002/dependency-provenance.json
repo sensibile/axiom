@@ -1,0 +1,32 @@
+{
+  "credo": {
+    "version": "1.7.19",
+    "archive_sha256": "2d8bc95d5a7bb99dd2613621d4f08c6a3575c3fd4b62e6a2b48a100352a557b8",
+    "hex_api_checksum": "2d8bc95d5a7bb99dd2613621d4f08c6a3575c3fd4b62e6a2b48a100352a557b8",
+    "cache_inner_checksum_verified": true
+  },
+  "dialyxir": {
+    "version": "1.4.7",
+    "archive_sha256": "b34527202e6eb8cee198efec110996c25c5898f43a4094df157f8d28f27d9efe",
+    "hex_api_checksum": "b34527202e6eb8cee198efec110996c25c5898f43a4094df157f8d28f27d9efe",
+    "cache_inner_checksum_verified": true
+  },
+  "erlex": {
+    "version": "0.2.9",
+    "archive_sha256": "8cfffc0ec7159e6d73de2ab28a588064de80f88b2798d5cbe4482cbbc200178b",
+    "hex_api_checksum": "8cfffc0ec7159e6d73de2ab28a588064de80f88b2798d5cbe4482cbbc200178b",
+    "cache_inner_checksum_verified": true
+  },
+  "bunt": {
+    "version": "1.0.0",
+    "archive_sha256": "dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5",
+    "hex_api_checksum": "dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5",
+    "cache_inner_checksum_verified": true
+  },
+  "file_system": {
+    "version": "1.1.1",
+    "archive_sha256": "7a15ff97dfe526aeefb090a7a9d3d03aa907e100e262a0f8f7746b78f8f87a5d",
+    "hex_api_checksum": "7a15ff97dfe526aeefb090a7a9d3d03aa907e100e262a0f8f7746b78f8f87a5d",
+    "cache_inner_checksum_verified": true
+  }
+}

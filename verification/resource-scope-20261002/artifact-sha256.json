@@ -1,0 +1,16 @@
+{
+  "initial-tests.log": "a53888d1709e5ae8a80a4356e094d7d912b29db10a00cd25d8e33e00d2aaecd5",
+  "before-sha256.json": "1494c83fd252625919c75be1c4752377c7490ce5747c9622c0d0f19656e230c8",
+  "legacy-independent-regression.log": "18c0b8037f89aba35496187a20b762d9b8b11889b3e83e64895062e40c830749",
+  "source-change-manifest.json": "0a85d32ad108e5fff08239074130e98584bd0aeae1c4873d994403219e0d4840",
+  "REPORT.md": "581d289e33d8a7e71f37f5183907cd80e2bd4c37db6aa5a763772deb895a0957",
+  "public-preservation.json": "942529d3ee76b258378703ab1eeb4222fe9c49b4eebfe07f68f3233355dc09ac",
+  "public-fixtures-before.raw": "0f5e282fe5fd9dce3d12c3488e9ce95b9a26a60afdb735927c139b130473fcf7",
+  "final-review.log": "28eea3f63ccb09348296f806033c8af5a201384b903c6853462d56c2d1ac07dd",
+  "public-fixtures-after.json": "e56f8d0e3b17cc200b96e9ae9e330a2bf9438cbd88ecf5dea101680aee9226be",
+  "after-sha256.json": "bd1184e3206b64b78c7c5640bc920bfcc2330aaca747a3d3cf66543e5a7955ff",
+  "review-before-database-fault-case.log": "92fa093ca4fe3181dc39fa7ce9db4af0fec1fc095d48c00f3f58d152ddc694ab",
+  "public-fixtures-before.json": "e56f8d0e3b17cc200b96e9ae9e330a2bf9438cbd88ecf5dea101680aee9226be",
+  "database-identity.json": "be9a3a5f20025806de49b377019a95ff560b211e2bc1e8288b02ea998f5843c9",
+  "initial-credo-failure.txt": "9c78ea40be179947bc554d52d1e946e6a44984711a3080f0c208e097dcaa7a56"
+}

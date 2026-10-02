@@ -1,0 +1,54 @@
+import os, pathlib, subprocess, json, hashlib, shutil, tempfile, time
+base=pathlib.Path('/Users/tonton/Documents/workspace/alaya')
+tag='independent-acceptance-local-20261002'
+def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+def run(cmd,cwd,env=None):
+ p=subprocess.run(cmd,cwd=cwd,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT); return {'command':cmd,'cwd':str(cwd),'exit':p.returncode,'raw':p.stdout}
+for name in ['akashic','axiom']:
+ root=base/name; out=root/'verification'/tag; out.mkdir(exist_ok=False)
+ meta={}; results=[]; env=os.environ.copy(); env['HEX_OFFLINE']='1'
+ files=[p for p in root.rglob('*') if p.is_file() and not any(x in p.relative_to(root).parts for x in ['.git','.cache','target','_build','deps','artifacts','verification','__pycache__'])]
+ meta['source_sha256']={str(p.relative_to(root)):digest(p) for p in files}
+ protected=[root/'.git/config',root/'.git/index',root/'.git/HEAD',root/'.git/refs/heads/main',pathlib.Path.home()/'.gitconfig',base/'akashic/target/debug/akashic']
+ meta['protected_before']={str(p):digest(p) for p in protected}
+ for cmd in [['git','rev-parse','--show-toplevel'],['git','branch','--show-current'],['git','rev-parse','--verify','HEAD'],['git','config','--local','--get','core.hooksPath'],['git','remote'],['git','hook','run','pre-commit']]: results.append(run(cmd,root))
+ paths=['.env','.env.production','.env.example','secret.pem','secret.key','test/fixtures/example.pem','test/fixtures/example.key','secret.pem.example','data/rocksdb/CURRENT','local.db','local.sqlite3-wal','.aws/credentials','.npmrc','.cache/test','verification/new/REPORT.md','test/fixtures/valid.json','artifacts/test','target/debug/akashic','_build/test/file']
+ meta['ignore']={p:run(['git','check-ignore','--no-index',p],root) for p in paths}
+ if name=='akashic':
+  target=root/'.cache'/tag/'target'; target.parent.mkdir(parents=True,exist_ok=True)
+  results.append(run(['cp','-cR',str(root/'.cache/local-git-final-target-20261002'),str(target)],root)); env['CARGO_TARGET_DIR']=str(target)
+ # Build only in dedicated paths, preserve source checkout build outputs.
+ mixroot=root/'elixir' if name=='akashic' else root
+ build=root/'.cache'/tag/'mix-build'; build.parent.mkdir(parents=True,exist_ok=True)
+ results.append(run(['cp','-cR',str(mixroot/'_build'),str(build)],root)); env['MIX_BUILD_PATH']=str(build)
+ # Axiom fast gate explicitly uses _build/test, so direct gate needs original compiled fast code; review forces compilation into separate path.
+ for mode in ['precommit','review']:
+  result=run(['./scripts/check',mode],root,env); (out/(mode+'.raw')).write_text(result['raw']); results.append({k:v for k,v in result.items() if k!='raw'}); print(name,mode,result['exit'],flush=True)
+ eq=root/'verification/local-git-final-20261002/behavior-equivalence.exs'
+ results.append(run(['elixir',str(eq)],root,env))
+ # Isolated complete nonignored source snapshot and independently copied hook.
+ tmp=pathlib.Path(tempfile.mkdtemp(prefix=name+'-staged-'))
+ for p in files:
+  rel=p.relative_to(root)
+  if run(['git','check-ignore','--no-index','-q',str(rel)],root)['exit']==0: continue
+  dest=tmp/rel; dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(p,dest)
+ run(['git','init','-b','main'],tmp); run(['git','config','core.hooksPath','.githooks'],tmp)
+ # Link only ignored, read-only-use runtime caches/builds required by real gate; independent target remains separate.
+ if name=='akashic': (tmp/'.cache').symlink_to(root/'.cache',target_is_directory=True)
+ else:
+  (tmp/'_build').symlink_to(build,target_is_directory=True)
+  (tmp/'.cache').symlink_to(root/'.cache',target_is_directory=True)
+ run(['git','add','.'],tmp)
+ probe=tmp/('crates/akashic-core/src/lib.rs' if name=='akashic' else 'lib/axiom/domain.ex')
+ good=probe.read_bytes(); probe.write_text('BROKEN STAGED SYNTAX !\n'); run(['git','add',str(probe.relative_to(tmp))],tmp); probe.write_bytes(good)
+ results.append(run(['git','hook','run','pre-commit'],tmp,env))
+ run(['git','add',str(probe.relative_to(tmp))],tmp)
+ result=run(['git','hook','run','pre-commit'],tmp,env); (out/'normal-staged-hook.raw').write_text(result['raw']); results.append({k:v for k,v in result.items() if k!='raw'}); print(name,'normal hook',result['exit'],flush=True)
+ (tmp/'unexpected.txt').write_text('untracked fixture\n'); results.append(run(['git','hook','run','pre-commit'],tmp,env)); (tmp/'unexpected.txt').unlink()
+ # Real hook exec preserves a failing check exit code in isolated fixture, no product modifications.
+ (tmp/'scripts/check').write_text('#!/bin/sh\nexit 7\n'); run(['git','add','scripts/check'],tmp); results.append(run(['git','hook','run','pre-commit'],tmp,env))
+ meta['isolated_repository']=str(tmp)
+ meta['protected_after']={str(p):digest(p) for p in protected}
+ meta['source_after']={str(p.relative_to(root)):digest(p) for p in files}
+ meta['source_unchanged']=meta['source_sha256']==meta['source_after']; meta['protected_unchanged']=meta['protected_before']==meta['protected_after']
+ (out/'metadata.json').write_text(json.dumps(meta,indent=2)); (out/'results.json').write_text(json.dumps(results,indent=2)); print(name,'DONE',flush=True)

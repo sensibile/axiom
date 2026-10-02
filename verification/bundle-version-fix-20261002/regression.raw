@@ -1,0 +1,27 @@
+warning: "xref: [exclude: ...]" in your mix.exs file is deprecated, instead use: "elixirc_options: [no_warn_undefined: ...]"
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:243: Mix.Tasks.Compile.Elixir.xref_exclude_opts/2
+  (mix 1.20.4) lib/mix/tasks/compile.elixir.ex:142: Mix.Tasks.Compile.Elixir.run/1
+  (mix 1.20.4) lib/mix/task.ex:502: anonymous fn/3 in Mix.Task.run_task/5
+  (mix 1.20.4) lib/mix/task.compiler.ex:299: Mix.Task.Compiler.run_compiler/2
+  (mix 1.20.4) lib/mix/task.compiler.ex:287: Mix.Task.Compiler.run/4
+  (mix 1.20.4) lib/mix/tasks/compile.all.ex:75: Mix.Tasks.Compile.All.do_run/2
+
+fixture_run_namespace: "a49d2d4a678e64a6"
+verified_identity: %{
+  version: 170010,
+  user: "axiom_test",
+  address: "192.168.215.2/32",
+  database: "axiom_test",
+  server_port: 5432
+}
+Running ExUnit with seed: 20261002, max_cases: 20
+
+...................................MODEL seed=20261002 steps=240 final=%{status: "active", head: 253, a: "revoked", rel: "active", releases: %{263 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 247 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 269 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 265 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 261 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 259 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 270 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 250 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 274 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 266 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 262 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 268 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 278 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 254 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 264 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 260 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 275 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 255 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 272 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 258 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 249 => %{"rules" => [%{"actions" => ["write"], "effect" => "allow", "resource_kind" => "document", "role" => "reader"}], "schema_version" => 1}, 277 => %{"rules" => [%{"actions" => ["read"], "effect" => "allow", ...}], ...}, ...}, ...}
+.BOUNDARY generation next=9223372036854775807 retry={:error, :revision_exhausted}
+.BOUNDARY draft next=9223372036854775807 publish={:ok, %{"kind" => "publish", "policy_generation" => 1, "policy_release_id" => 281}}
+.BOUNDARY assignment next=9223372036854775807 retry={:error, :revision_exhausted}
+.
+Finished in 19.5 seconds (0.9s on load, 0.00s async, 18.5s sync)
+
+Result: 39 passed
+public_preserved: true

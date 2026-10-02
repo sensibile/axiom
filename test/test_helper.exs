@@ -1,0 +1,5 @@
+ExUnit.start()
+Axiom.TestDatabase.prepare!()
+{:ok, conn} = Postgrex.start_link(Axiom.TestDatabase.options())
+Process.unlink(conn)
+Application.put_env(:axiom, :test_conn, conn)

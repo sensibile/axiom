@@ -1,0 +1,30 @@
+{
+  "command": [
+    "elixir",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/axiom/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/bunt/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/credo/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/db_connection/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/decimal/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/dialyxir/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/erlex/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/file_system/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/jason/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/postgrex/ebin",
+    "-pa",
+    "/Users/tonton/Documents/workspace/alaya/axiom/.cache/independent-acceptance-local-20261002/mix-build/test/lib/telemetry/ebin",
+    "/Users/tonton/Documents/workspace/alaya/axiom/verification/local-git-final-20261002/behavior-equivalence.exs"
+  ],
+  "exit": 0,
+  "raw": "Policy equivalence: 450 inputs/roles matched\n"
+}
