@@ -17,7 +17,7 @@ case "${1:-}" in
   format) mix format ;;
   check) static ;;
   test) MIX_ENV=test mix compile --warnings-as-errors; fast ;;
-  precommit) static; fast ;;
-  review) static; fast; mix dialyzer; mix test --warnings-as-errors ;;
+  precommit) ./scripts/test-push-boundary; static; fast ;;
+  review) ./scripts/test-push-boundary; ./scripts/test-push-gate; static; fast; mix dialyzer; mix test --warnings-as-errors ;;
   *) echo 'usage: scripts/check format|check|test|precommit|review' >&2; exit 2 ;;
 esac
