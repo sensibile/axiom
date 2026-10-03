@@ -1,6 +1,9 @@
 #!/bin/sh
 set -eu
-cd "$(git rev-parse --show-toplevel)"
+# Keep checkout path newlines; remove only Git's output delimiter.
+checkout=$(git rev-parse --show-toplevel && printf .)
+checkout=${checkout%.}
+cd "${checkout%?}"
 # Reject any index/worktree mismatch; never stage, stash or rewrite user files.
 if ! git diff --quiet --no-ext-diff --; then
   echo 'pre-commit: unstaged tracked changes exist; stage the intended complete state or resolve them manually.' >&2
