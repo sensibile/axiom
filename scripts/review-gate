@@ -762,7 +762,7 @@ def main():
                 "PR target is updated by the same push; push target separately, then prepare and review again",
             )
             check_record(record)
-        print("pre-push: sealed Codex Security and independent review verified")
+        print("pre-push: sealed Codex Security and Codex review verified")
     elif mode == "verify-submodule":
         require(
             len(sys.argv) in (5, 6), "verify-submodule RECEIPT BASE HEAD [CONSUMER_URL]"
